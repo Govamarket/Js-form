@@ -54,21 +54,37 @@ const name = document.querySelector("#name");
 const email = document.querySelector("#email");
 const msg = document.querySelector("#msg");
 const userList = document.querySelector("#users");
+loadUsers();
 
 form.addEventListener("submit", function (e) {
   e.preventDefault();
 
   if (name.value === "" || email.value === "") {
     msg.classList.add("error");
-    msg.innerHTML = "Please enter all fields";
-    setTimeout(() => msg.remove(), 3000);
+    msg.textContent = "Please enter all fields";
+    setTimeout(() => {
+      msg.classList.remove("error");
+      msg.innerHTML = "";
+    }, 3000);
   } else {
-    const li = document.createElement("li");
-    li.appendChild(
-      document.createTextNode(`Name: ${name.value}, Email: ${email.value}`),
-    );
-    userList.appendChild(li);
-  }
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    users.push({ name: name.value, email: email.value });
+    localStorage.setItem("users", JSON.stringify(users));
 
-  //   const user = `Name: ${name.value}, Email: ${email.value}`;
+    addUserToList({ name: name.value, email: email.value });
+
+    name.value = "";
+    email.value = "";
+  }
 });
+
+function loadUsers() {
+  const users = JSON.parse(localStorage.getItem("users")) || [];
+  users.forEach((user) => addUserToList(user));
+}
+
+function addUserToList(user) {
+  const li = document.createElement("li");
+  li.textContent = `${user.name}: ${user.email}`;
+  userList.appendChild(li);
+}
