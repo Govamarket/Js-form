@@ -4,8 +4,9 @@
   padding: 20px;
   border: 1px solid #ccc;
   background-color: #f9f9f9;
-  border-radius: 5px;
+  border-radius: 10px;
   padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 #userForm h1{
@@ -21,7 +22,9 @@
 }
 
 input[type="text"],
-input[type="email"] {
+input[type="email"],
+input[type="password"],
+input[type="confirmPassword"] {
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
@@ -48,4 +51,14 @@ input[type="email"] {
   font-size: 18px;
   color: #000;
   border-radius: 4px;
+}
+
+.error {
+  color: #ec1026;
+  border: 1px solid #f4eaeb;
+  box-shadow: 0 0 10px rgba(249, 230, 232, 0.5);
+  padding: 10px;
+  margin: 20px auto;
+  position: relative;
+  width: 80%;
 }

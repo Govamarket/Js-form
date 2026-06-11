@@ -54,12 +54,20 @@ const name = document.querySelector("#name");
 const email = document.querySelector("#email");
 const msg = document.querySelector("#msg");
 const userList = document.querySelector("#users");
+const password = document.querySelector("#password");
+const confirmPassword = document.querySelector("#confirmPassword");
 loadUsers();
 
 form.addEventListener("submit", function (e) {
   e.preventDefault();
+  //  addUserToList({ name: name.value, email: email.value });
 
-  if (name.value === "" || email.value === "") {
+  if (
+    name.value === "" ||
+    email.value === "" ||
+    password.value === "" ||
+    confirmPassword.value === ""
+  ) {
     msg.classList.add("error");
     msg.textContent = "Please enter all fields";
     setTimeout(() => {
@@ -68,14 +76,15 @@ form.addEventListener("submit", function (e) {
     }, 3000);
   } else {
     const users = JSON.parse(localStorage.getItem("users")) || [];
-    users.push({ name: name.value, email: email.value });
+    users.push({
+      name: name.value,
+      email: email.value,
+      password: password.value,
+      passwordMatch: passwordMatch.value,
+    });
     localStorage.setItem("users", JSON.stringify(users));
-
-    addUserToList({ name: name.value, email: email.value });
-
-    name.value = "";
-    email.value = "";
   }
+  passwordMatch();
 });
 
 function loadUsers() {
@@ -83,8 +92,15 @@ function loadUsers() {
   users.forEach((user) => addUserToList(user));
 }
 
-function addUserToList(user) {
-  const li = document.createElement("li");
-  li.textContent = `${user.name}: ${user.email}`;
-  userList.appendChild(li);
+function passwordMatch() {
+  if (password.value !== confirmPassword.value) {
+    msg.classList.add("error");
+    msg.textContent = "Passwords do not match";
+    setTimeout(() => {
+      msg.classList.remove("error");
+      msg.innerHTML = "";
+    }, 3000);
+  } else {
+    return true;
+  }
 }
