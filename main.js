@@ -56,11 +56,10 @@ const msg = document.querySelector("#msg");
 const userList = document.querySelector("#users");
 const password = document.querySelector("#password");
 const confirmPassword = document.querySelector("#confirmPassword");
-loadUsers();
 
 form.addEventListener("submit", function (e) {
   e.preventDefault();
-  //  addUserToList({ name: name.value, email: email.value });
+  // addUserToList({ name: name.value, email: email.value });
 
   if (
     name.value === "" ||
@@ -70,26 +69,43 @@ form.addEventListener("submit", function (e) {
   ) {
     msg.classList.add("error");
     msg.textContent = "Please enter all fields";
+
     setTimeout(() => {
       msg.classList.remove("error");
       msg.innerHTML = "";
     }, 3000);
+  } else if (!passwordMatch()) {
+    return;
   } else {
     const users = JSON.parse(localStorage.getItem("users")) || [];
     users.push({
       name: name.value,
       email: email.value,
       password: password.value,
-      passwordMatch: passwordMatch.value,
+      confirmPassword: confirmPassword.value,
     });
+
+    // Clear form fields
+    name.value = "";
+    email.value = "";
+    password.value = "";
+    confirmPassword.value = "";
+    msg.classList.add("success");
+    msg.textContent = "User added successfully!";
+    setTimeout(() => {
+      msg.classList.remove("success");
+      msg.innerHTML = "";
+    }, 3000);
+
     localStorage.setItem("users", JSON.stringify(users));
+    loadUsers();
   }
-  passwordMatch();
 });
 
 function loadUsers() {
+  userList.innerHTML = "";
   const users = JSON.parse(localStorage.getItem("users")) || [];
-  users.forEach((user) => addUserToList(user));
+  users.forEach((userObj) => addUserToList(userObj));
 }
 
 function passwordMatch() {
